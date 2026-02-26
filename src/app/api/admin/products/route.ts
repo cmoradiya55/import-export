@@ -1,16 +1,25 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { Product } from "@/lib/db";
+import { Op } from "sequelize";
 
-const filePath = path.join(process.cwd(), "src", "data", "products.json");
-
-function readFile() {
-  const fileData = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(fileData);
-}
-
-function writeFile(data: any) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+// Helper function to group products by category as expected by the frontend
+function groupProductsByCategory(products: any[]) {
+  const groups: any[] = [];
+  products.forEach((p) => {
+    const productData = p.get ? p.get({ plain: true }) : p;
+    let group = groups.find((g) => g.categoryId === productData.categoryId);
+    if (!group) {
+      group = {
+        categoryId: productData.categoryId,
+        categoryName: productData.categoryName,
+        categoryLabel: productData.categoryLabel,
+        products: [],
+      };
+      groups.push(group);
+    }
+    group.products.push(productData);
+  });
+  return groups;
 }
 
 // GET API
@@ -18,112 +27,118 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
-    const categories = readFile();
+
+    const allProducts = await Product.findAll();
+    const grouped = groupProductsByCategory(allProducts);
 
     if (category) {
       // Return all categories to keep filter buttons visible,
       // but only include products for the selected category.
-      const filteredCategories = categories.map((cat: any) => ({
-        ...cat,
+      const filteredGroups = grouped.map((group) => ({
+        ...group,
         products:
-          String(cat.categoryLabel) === String(category) ? cat.products : [],
+          String(group.categoryLabel) === String(category)
+            ? group.products
+            : [],
       }));
-      return NextResponse.json(filteredCategories);
+      return NextResponse.json(filteredGroups);
     }
 
-    return NextResponse.json(categories);
+    return NextResponse.json(grouped);
   } catch (error) {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    console.error("GET Products Error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch products" },
+      { status: 500 },
+    );
   }
 }
 
 // POST API
 export async function POST(req: Request) {
-  const newProduct = await req.json();
-  const categories = readFile();
+  try {
+    const newProductData = await req.json();
 
-  // Check for duplicate productsId across all categories
-  for (const cat of categories) {
-    if (cat.products.some((p: any) => p.productsId === newProduct.productsId)) {
+    // Check for duplicate productsId
+    const existing = await Product.findOne({
+      where: { productsId: newProductData.productsId },
+    });
+    if (existing) {
       return NextResponse.json(
         { error: "Product ID already exists" },
         { status: 400 },
       );
     }
+
+    await Product.create(newProductData);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("POST Products Error:", error);
+    return NextResponse.json(
+      { error: "Failed to create product" },
+      { status: 500 },
+    );
   }
-
-  const category = categories.find(
-    (cat: any) => cat.categoryId === newProduct.categoryId,
-  );
-
-  if (category) {
-    category.products.push(newProduct);
-  } else {
-    // If category does not exist, create it
-    categories.push({
-      categoryId: newProduct.categoryId,
-      categoryName: newProduct.categoryName,
-      categoryLabel: newProduct.categoryLabel,
-      products: [newProduct],
-    });
-  }
-
-  writeFile(categories);
-
-  return NextResponse.json({ success: true });
 }
 
 // PUT (UPDATE) API
 export async function PUT(req: Request) {
-  const updatedProduct = await req.json();
-  const categories = readFile();
+  try {
+    const updatedProductData = await req.json();
+    const { id, ...rest } = updatedProductData;
 
-  // Check for duplicate productsId across all categories (excluding current product)
-  for (const cat of categories) {
-    if (
-      cat.products.some(
-        (p: any) =>
-          p.productsId === updatedProduct.productsId &&
-          p.id !== updatedProduct.id,
-      )
-    ) {
+    // Check for duplicate productsId across all entries (excluding the one being updated)
+    const duplicate = await Product.findOne({
+      where: {
+        productsId: updatedProductData.productsId,
+        id: { [Op.ne]: id },
+      },
+    });
+
+    if (duplicate) {
       return NextResponse.json(
         { error: "Product ID already exists" },
         { status: 400 },
       );
     }
-  }
 
-  for (const category of categories) {
-    const productIndex = category.products.findIndex(
-      (p: any) => p.id === updatedProduct.id,
-    );
+    const [updatedCount] = await Product.update(rest, {
+      where: { id },
+    });
 
-    if (productIndex !== -1) {
-      category.products[productIndex] = updatedProduct;
-      writeFile(categories);
-      return NextResponse.json({ success: true });
+    if (updatedCount === 0) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
-  }
 
-  return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("PUT Products Error:", error);
+    return NextResponse.json(
+      { error: "Failed to update product" },
+      { status: 500 },
+    );
+  }
 }
 
 // DELETE API
 export async function DELETE(req: Request) {
-  const { id } = await req.json();
-  const categories = readFile();
+  try {
+    const { id } = await req.json();
 
-  for (const category of categories) {
-    const originalLength = category.products.length;
+    const deletedCount = await Product.destroy({
+      where: { id },
+    });
 
-    category.products = category.products.filter((p: any) => p.id !== id);
-
-    if (category.products.length !== originalLength) {
-      writeFile(categories);
-      return NextResponse.json({ success: true });
+    if (deletedCount === 0) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
-  }
 
-  return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("DELETE Products Error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete product" },
+      { status: 500 },
+    );
+  }
 }
