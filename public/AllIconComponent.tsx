@@ -7,6 +7,10 @@ import GlobalIcon from "./icon/GlobalIcon";
 import GlobalLogisticsIcon from "./icon/GlobalLogisticsIcon";
 import FoodSafetyIcon from "./icon/FoodSafetyIcon";
 import ExportReadyIcon from "./icon/ExportReadyIcon";
+import ReliableServiceIcon from "./icon/ReliableServiceIcon";
+import QualityAssuranceIcon from "./icon/QualityAssuranceIcon";
+import CompetitivePricesIcon from "./icon/CompetitivePricesIcon";
+import BlogEmailIcon from "./icon/BlogEmailIcon";
 
 interface AllIconComponentProps {
     width: number;
@@ -24,6 +28,10 @@ export const iconMap: Record<string, any> = {
     globalIcon: GlobalIcon,
     foodSafetyIcon: FoodSafetyIcon,
     exportReadyIcon: ExportReadyIcon,
+    reliableServiceIcon: ReliableServiceIcon,
+    qualityAssuranceIcon: QualityAssuranceIcon,
+    competitivePricesIcon: CompetitivePricesIcon,
+    blogEmailIcon: BlogEmailIcon,
 };
 
 const AllIconComponent = ({
@@ -32,7 +40,12 @@ const AllIconComponent = ({
     icon,
     className = "",
 }: AllIconComponentProps) => {
+    console.log("icon", icon);
+    
     const SelectedIcon = iconMap[icon];
+
+    console.log("Selected", SelectedIcon);
+    
 
     if (!SelectedIcon) return null;
 

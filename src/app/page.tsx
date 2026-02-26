@@ -1,6 +1,3 @@
-import ProductSlider from "@/src/component/HomePageComponent/ProductSlider";
-import Services from "@/src/component/HomePageComponent/Services";
-import Slider from "@/src/component/HomePageComponent/Slider";
 import AboutCompany from "../component/HomePageComponent/AboutCompany";
 import Statistics from "../component/HomePageComponent/Statistics";
 import IntroducingOurWork from "../component/HomePageComponent/IntroducingOurWork";
@@ -8,6 +5,9 @@ import TeamComponent from "../component/HomePageComponent/TeamComponent";
 import WhyChooseUs from "../component/HomePageComponent/WhyChooseUs";
 import Testimonials from "../component/HomePageComponent/Testimonials";
 import BlogAndNews from "../component/HomePageComponent/BlogAndNews";
+import Slider from "@/component/HomePageComponent/Slider";
+import Services from "@/component/HomePageComponent/Services";
+import ProductSlider from "@/component/HomePageComponent/ProductSlider";
 
 export default function Home() {
     return (
@@ -15,7 +15,7 @@ export default function Home() {
             <main className="w-full">
 
                 {/* Slider Section */}
-                <section className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-16">
+                <section className="bg-white">
                     <div className="mx-auto">
                         <Slider />
                     </div>

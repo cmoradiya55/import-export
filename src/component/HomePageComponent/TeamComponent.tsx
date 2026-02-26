@@ -1,5 +1,4 @@
-import AnimateOnScroll from "@/Component/AnimateOnScroll/AnimateOnScroll";
-import React from "react";
+import AnimateOnScroll from "../../../Component/AnimateOnScroll/AnimateOnScroll";
 
 const TeamComponent = () => {
 
@@ -54,7 +53,7 @@ const TeamComponent = () => {
                                 />
                             </div>
                             <h3 className="text-xl font-bold text-primary-900 mb-1 mt-1.5 text-center">{member.name}</h3>
-                            <p className="text-primary-600 font-semibold text-sm text-center mb-3">{member.role}</p>
+                            <p className="text-gray-600 font-semibold text-sm text-center mb-3">{member.role}</p>
                         </div>
                     ))}
                 </div>
