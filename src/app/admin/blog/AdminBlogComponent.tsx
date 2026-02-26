@@ -12,14 +12,14 @@ import {
   User,
   Tag,
 } from "lucide-react";
-import type { BlogPostAttributes } from "@/lib/db/types";
+// import type { BlogPostAttributes } from "@/lib/db/types";
 
 interface AdminBlogComponentProps {
-  initialPosts: BlogPostAttributes[];
+  initialPosts: any[];
 }
 
 const AdminBlogComponent = ({ initialPosts }: AdminBlogComponentProps) => {
-  const [posts, setPosts] = useState<BlogPostAttributes[]>(
+  const [posts, setPosts] = useState<any[]>(
     Array.isArray(initialPosts) ? initialPosts : [],
   );
   const [idToDelete, setIdToDelete] = useState<string | null>(null);
@@ -217,7 +217,7 @@ const AdminBlogComponent = ({ initialPosts }: AdminBlogComponentProps) => {
                   {/* Tags */}
                   {post.tags && post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-3">
-                      {post.tags.slice(0, 3).map((tag) => (
+                      {post.tags.slice(0, 3).map((tag: any) => (
                         <span
                           key={tag}
                           className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded-md text-[8px] font-medium uppercase tracking-wider group-hover:bg-primary-600/10 group-hover:text-primary-700 transition-colors"

@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import type { ProductAttributes } from "@/lib/db/types";
+// import type { ProductAttributes } from "@/lib/db/types";
 import ProductForm from "@/component/AdminComponenet/ProductForm";
 
 const EditProductPage = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState<ProductAttributes | null>(null);
+  const [product, setProduct] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const EditProductPage = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6 text-white">Edit Product</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">Edit Product</h1>
       <ProductForm initialData={product} />
     </div>
   );

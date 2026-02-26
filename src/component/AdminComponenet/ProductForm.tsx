@@ -253,16 +253,22 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                         {...register("productsId", {
                           required: "Product ID is required",
                           validate: (value) => {
+                            const upperValue = value.toUpperCase();
                             if (
                               !isEditing &&
-                              existingProductIds.includes(value)
+                              existingProductIds.includes(upperValue)
                             ) {
                               return "This Product ID already exists";
                             }
                             if (
                               isEditing &&
-                              value !== initialData?.productsId &&
-                              existingProductIds.includes(value)
+                              upperValue !==
+                                (
+                                  initialData?.productsId ||
+                                  initialData?.id ||
+                                  ""
+                                ).toUpperCase() &&
+                              existingProductIds.includes(upperValue)
                             ) {
                               return "This Product ID already exists";
                             }
