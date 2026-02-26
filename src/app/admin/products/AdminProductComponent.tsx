@@ -32,6 +32,8 @@ const AdminProductComponent = () => {
           })),
         );
 
+        console.log("allProducts", allProducts);
+
         setProducts(allProducts);
       } catch (error) {
         console.error("Failed to fetch products:", error);
