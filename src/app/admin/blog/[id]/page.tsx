@@ -1,13 +1,13 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
-import type { BlogPostAttributes } from '@/lib/db/types';
-import BlogForm from '@/component/AdminComponenet/BlogForm';
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
+// import type { BlogPostAttributes } from '@/lib/db/types';
+import BlogForm from "@/component/AdminComponenet/BlogForm";
 
 const EditBlogPage = () => {
   const { id } = useParams();
-  const [blogPost, setBlogPost] = useState<BlogPostAttributes | null>(null);
+  const [blogPost, setBlogPost] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +26,10 @@ const EditBlogPage = () => {
       </div>
     );
   }
-  if (!blogPost) return <div className="text-gray-400 text-center py-20">Blog post not found</div>;
+  if (!blogPost)
+    return (
+      <div className="text-gray-400 text-center py-20">Blog post not found</div>
+    );
 
   return (
     <div>
@@ -34,6 +37,6 @@ const EditBlogPage = () => {
       <BlogForm initialData={blogPost} />
     </div>
   );
-}
+};
 
 export default EditBlogPage;

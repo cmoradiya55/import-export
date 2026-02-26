@@ -2,7 +2,19 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Pencil, Trash2, Loader2, Package, Grid3X3 } from "lucide-react";
-import type { ProductAttributes } from "@/lib/db/types";
+// Local interface for product data
+interface ProductAttributes {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  packageSizes: string[];
+  container: string[];
+  categoryId: number;
+  categoryName: string;
+  categoryLabel: string;
+  productsId: string;
+}
 
 interface AdminProductComponentProps {
   initialProducts: any[];
@@ -26,21 +38,24 @@ const AdminProductComponent = ({
       try {
         const res = await fetch("/api/admin/products");
         const data = await res.json();
+        console.log("API Data", data);
 
-        // Flatten category-based structure
-        const allProducts = data.flatMap((cat: any) =>
-          (cat.products || []).map((product: any) => ({
-            ...product,
-            categoryName: cat.categoryName,
-            categoryId: cat.categoryId,
-            categoryLabel: cat.categoryLabel,
-            productsId: product.productsId || product.id,
-          })),
-        );
-
-        console.log("allProducts", allProducts);
-
-        setProducts(allProducts);
+        if (Array.isArray(data)) {
+          // Flatten category-based structure
+          const allProducts = data.flatMap((cat: any) =>
+            (cat.products || []).map((product: any) => ({
+              ...product,
+              categoryName: cat.categoryName,
+              categoryId: cat.categoryId,
+              categoryLabel: cat.categoryLabel,
+              productsId: product.productsId || product.id,
+            })),
+          );
+          setProducts(allProducts);
+        } else {
+          console.error("API returned non-array data:", data);
+          setProducts([]);
+        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
