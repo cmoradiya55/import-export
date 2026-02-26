@@ -46,21 +46,48 @@ interface ProductFormProps {
 const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [existingProductIds, setExistingProductIds] = useState<string[]>([]);
 
-  const { register, watch, handleSubmit, setValue, reset } =
-    useForm<ProductFormValues>({
-      defaultValues: {
-        name: "",
-        productsId: "",
-        description: "",
-        image: "",
-        packageSizes: "",
-        container: "",
-        categoryId: 0,
-        categoryName: "",
-        categoryLabel: "",
-      },
-    });
+  const fetchExistingProductIds = async () => {
+    try {
+      const response = await fetch("/api/admin/products");
+      if (response.ok) {
+        const categories = await response.json();
+        const ids = categories.flatMap((cat: any) =>
+          cat.products.map((p: any) => p.productsId),
+        );
+        setExistingProductIds(ids);
+      }
+    } catch (error) {
+      console.error("Error fetching existing products:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchExistingProductIds();
+  }, []);
+
+  const {
+    register,
+    watch,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+    setError,
+  } = useForm<ProductFormValues>({
+    defaultValues: {
+      name: "",
+      productsId: "",
+      description: "",
+      image: "",
+      packageSizes: "",
+      container: "",
+      categoryId: 0,
+      categoryName: "",
+      categoryLabel: "",
+    },
+  });
 
   const isEditing = !!initialData;
   const imageUrl = watch("image");
@@ -115,7 +142,15 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save product");
+        const errorData = await response.json();
+        if (errorData.error === "Product ID already exists") {
+          setError("productsId", {
+            type: "manual",
+            message: "This Product ID already exists",
+          });
+          return;
+        }
+        throw new Error(errorData.error || "Failed to save product");
       }
 
       alert(
@@ -132,14 +167,6 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
     } finally {
       setIsSaving(false);
     }
-
-    // await new Promise((resolve) => setTimeout(resolve, 800));
-    // console.log("Product Data", data);
-
-    // if (onSubmit) {
-    //   onSubmit(data);
-    // }
-    // setIsSaving(false);
   };
 
   const handleImageChange = (url: string) => {
@@ -219,14 +246,41 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                       <div className="flex items-center justify-between">
                         <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                           Products Id
+                          <span className="text-red-500">*</span>
                         </label>
                       </div>
                       <input
-                        {...register("productsId")}
+                        {...register("productsId", {
+                          required: "Product ID is required",
+                          validate: (value) => {
+                            if (
+                              !isEditing &&
+                              existingProductIds.includes(value)
+                            ) {
+                              return "This Product ID already exists";
+                            }
+                            if (
+                              isEditing &&
+                              value !== initialData?.productsId &&
+                              existingProductIds.includes(value)
+                            ) {
+                              return "This Product ID already exists";
+                            }
+                            return true;
+                          },
+                        })}
                         placeholder="e.g., C1P1"
-                        className=" border uppercase border-gray-300 text-gray-800 rounded-lg px-3 py-2 w-full placeholder:text-gray-400
-                          focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600"
+                        className={`border uppercase rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                          errors.productsId
+                            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                        }`}
                       />
+                      {errors.productsId && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.productsId.message}
+                        </p>
+                      )}
                     </div>
 
                     {/* Description */}

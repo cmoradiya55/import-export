@@ -95,12 +95,12 @@ const ProductComponent = () => {
               router.push("/product", { scroll: false });
             }}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium border transition-all shadow-sm text-xs md:text-sm
-                            ${
-                              selectedCategory === null
-                                ? "bg-primary-700 text-white border-primary-700 shadow-primary-200"
-                                : "bg-white text-primary-700 border-primary-200 hover:bg-primary-100 hover:border-primary-400 hover:text-primary-900 focus:ring-2 focus:ring-primary-400"
-                            }
-                        `}
+              ${
+                selectedCategory === null
+                  ? "bg-primary-700 text-white border-primary-700 shadow-primary-200"
+                  : "bg-white text-primary-700 border-primary-200 hover:bg-primary-100 hover:border-primary-400 hover:text-primary-900 focus:ring-2 focus:ring-primary-400"
+              }
+            `}
             style={{ boxShadow: "0 1px 4px 0 rgba(216, 70, 239, 0.05)" }}
           >
             <span className="whitespace-nowrap">All</span>
