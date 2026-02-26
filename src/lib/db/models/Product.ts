@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 
 export interface ProductAttributes {
   id: string;
@@ -10,11 +10,15 @@ export interface ProductAttributes {
   categoryId: number;
   categoryName: string;
   categoryLabel: string;
+  productsId: string;
 }
 
-interface ProductCreationAttributes extends Optional<ProductAttributes, 'id'> { }
+interface ProductCreationAttributes extends Optional<ProductAttributes, "id"> {}
 
-class Product extends Model<ProductAttributes, ProductCreationAttributes> implements ProductAttributes {
+class Product
+  extends Model<ProductAttributes, ProductCreationAttributes>
+  implements ProductAttributes
+{
   public id!: string;
   public name!: string;
   public description!: string;
@@ -24,6 +28,7 @@ class Product extends Model<ProductAttributes, ProductCreationAttributes> implem
   public categoryId!: number;
   public categoryName!: string;
   public categoryLabel!: string;
+  public productsId!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -62,12 +67,17 @@ export function initProduct(sequelize: Sequelize) {
       categoryLabel: {
         type: DataTypes.STRING,
       },
+      productsId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
     },
     {
       sequelize,
-      modelName: 'Product',
-      tableName: 'products',
-    }
+      modelName: "Product",
+      tableName: "products",
+    },
   );
   return Product;
 }
