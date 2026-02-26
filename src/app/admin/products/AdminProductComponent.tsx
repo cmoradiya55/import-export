@@ -4,13 +4,19 @@ import Link from "next/link";
 import { Plus, Pencil, Trash2, Loader2, Package, Grid3X3 } from "lucide-react";
 import type { ProductAttributes } from "@/lib/db/types";
 
-// interface AdminProductComponentProps {
-//   initialProducts: ProductAttributes[];
-// }
+interface AdminProductComponentProps {
+  initialProducts: any[];
+}
 
-const AdminProductComponent = () => {
-  const [products, setProducts] = useState<ProductAttributes[]>([]);
-  const [loading, setLoading] = useState(true);
+const AdminProductComponent = ({
+  initialProducts,
+}: AdminProductComponentProps) => {
+  const [products, setProducts] = useState<ProductAttributes[]>(
+    initialProducts || [],
+  );
+  const [loading, setLoading] = useState(
+    !initialProducts || initialProducts.length === 0,
+  );
   const [idToDelete, setIdToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 

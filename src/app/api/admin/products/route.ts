@@ -42,6 +42,16 @@ export async function POST(req: Request) {
   const newProduct = await req.json();
   const categories = readFile();
 
+  // Check for duplicate productsId across all categories
+  for (const cat of categories) {
+    if (cat.products.some((p: any) => p.productsId === newProduct.productsId)) {
+      return NextResponse.json(
+        { error: "Product ID already exists" },
+        { status: 400 },
+      );
+    }
+  }
+
   const category = categories.find(
     (cat: any) => cat.categoryId === newProduct.categoryId,
   );
@@ -67,6 +77,22 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   const updatedProduct = await req.json();
   const categories = readFile();
+
+  // Check for duplicate productsId across all categories (excluding current product)
+  for (const cat of categories) {
+    if (
+      cat.products.some(
+        (p: any) =>
+          p.productsId === updatedProduct.productsId &&
+          p.id !== updatedProduct.id,
+      )
+    ) {
+      return NextResponse.json(
+        { error: "Product ID already exists" },
+        { status: 400 },
+      );
+    }
+  }
 
   for (const category of categories) {
     const productIndex = category.products.findIndex(
