@@ -12,13 +12,15 @@ const ProductComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(cat);
   const [allProductsList, setAllProductsList] = useState<any[]>([]);
   //   const allProducts = AllProductsList.flatMap((cat) => cat.products);
-  const allProducts = allProductsList.flatMap((cat: any) =>
-    (cat.products || []).map((product: any) => ({
-      ...product,
-      categoryName: cat.categoryName,
-      categoryId: cat.categoryId,
-    })),
-  );
+  const allProducts = Array.isArray(allProductsList)
+    ? allProductsList.flatMap((cat: any) =>
+        (cat.products || []).map((product: any) => ({
+          ...product,
+          categoryName: cat.categoryName,
+          categoryId: cat.categoryId,
+        })),
+      )
+    : [];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,7 +33,12 @@ const ProductComponent = () => {
 
         console.log("API Data", data);
 
-        setAllProductsList(data);
+        if (Array.isArray(data)) {
+          setAllProductsList(data);
+        } else {
+          console.error("API returned non-array data:", data);
+          setAllProductsList([]);
+        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       }

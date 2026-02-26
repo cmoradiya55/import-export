@@ -1,25 +1,23 @@
 import { NextResponse } from "next/server";
-import { Product } from "@/lib/db";
-import { Op } from "sequelize";
+import fs from "fs/promises";
+import path from "path";
 
-// Helper function to group products by category as expected by the frontend
-function groupProductsByCategory(products: any[]) {
-  const groups: any[] = [];
-  products.forEach((p) => {
-    const productData = p.get ? p.get({ plain: true }) : p;
-    let group = groups.find((g) => g.categoryId === productData.categoryId);
-    if (!group) {
-      group = {
-        categoryId: productData.categoryId,
-        categoryName: productData.categoryName,
-        categoryLabel: productData.categoryLabel,
-        products: [],
-      };
-      groups.push(group);
-    }
-    group.products.push(productData);
-  });
-  return groups;
+export const dynamic = "force-dynamic";
+
+const DATA_PATH = path.join(process.cwd(), "src/data/products.json");
+
+async function getProducts() {
+  try {
+    const data = await fs.readFile(DATA_PATH, "utf-8");
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error reading products.json:", error);
+    return [];
+  }
+}
+
+async function saveProducts(data: any) {
+  await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2), "utf-8");
 }
 
 // GET API
@@ -27,14 +25,22 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
+    const id = searchParams.get("id");
 
-    const allProducts = await Product.findAll();
-    const grouped = groupProductsByCategory(allProducts);
+    const grouped = await getProducts();
+
+    if (id) {
+      for (const group of grouped) {
+        const product = group.products.find(
+          (p: any) => p.id === id || p.productsId === id,
+        );
+        if (product) return NextResponse.json(product);
+      }
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
 
     if (category) {
-      // Return all categories to keep filter buttons visible,
-      // but only include products for the selected category.
-      const filteredGroups = grouped.map((group) => ({
+      const filteredGroups = grouped.map((group: any) => ({
         ...group,
         products:
           String(group.categoryLabel) === String(category)
@@ -45,7 +51,7 @@ export async function GET(req: Request) {
     }
 
     return NextResponse.json(grouped);
-  } catch (error) {
+  } catch (error: any) {
     console.error("GET Products Error:", error);
     return NextResponse.json(
       { error: "Failed to fetch products" },
@@ -57,22 +63,36 @@ export async function GET(req: Request) {
 // POST API
 export async function POST(req: Request) {
   try {
-    const newProductData = await req.json();
+    const newProduct = await req.json();
+    const grouped = await getProducts();
 
-    // Check for duplicate productsId
-    const existing = await Product.findOne({
-      where: { productsId: newProductData.productsId },
-    });
-    if (existing) {
-      return NextResponse.json(
-        { error: "Product ID already exists" },
-        { status: 400 },
-      );
+    // Find category
+    const categoryIndex = grouped.findIndex(
+      (g: any) => g.categoryId === newProduct.categoryId,
+    );
+
+    if (categoryIndex === -1) {
+      // Create new category if not exists
+      grouped.push({
+        categoryId: newProduct.categoryId,
+        categoryName: newProduct.categoryName,
+        categoryLabel: newProduct.categoryLabel,
+        products: [{ ...newProduct, id: Date.now().toString() }],
+      });
+    } else {
+      // Add to existing category
+      grouped[categoryIndex].products.push({
+        ...newProduct,
+        id: Date.now().toString(),
+      });
     }
 
-    await Product.create(newProductData);
-    return NextResponse.json({ success: true });
-  } catch (error) {
+    await saveProducts(grouped);
+    return NextResponse.json({
+      success: true,
+      message: "Product added successfully",
+    });
+  } catch (error: any) {
     console.error("POST Products Error:", error);
     return NextResponse.json(
       { error: "Failed to create product" },
@@ -84,34 +104,31 @@ export async function POST(req: Request) {
 // PUT (UPDATE) API
 export async function PUT(req: Request) {
   try {
-    const updatedProductData = await req.json();
-    const { id, ...rest } = updatedProductData;
+    const updatedProduct = await req.json();
+    const grouped = await getProducts();
+    let found = false;
 
-    // Check for duplicate productsId across all entries (excluding the one being updated)
-    const duplicate = await Product.findOne({
-      where: {
-        productsId: updatedProductData.productsId,
-        id: { [Op.ne]: id },
-      },
-    });
-
-    if (duplicate) {
-      return NextResponse.json(
-        { error: "Product ID already exists" },
-        { status: 400 },
+    for (let i = 0; i < grouped.length; i++) {
+      const productIndex = grouped[i].products.findIndex(
+        (p: any) => p.id === updatedProduct.id,
       );
+      if (productIndex !== -1) {
+        grouped[i].products[productIndex] = { ...updatedProduct };
+        found = true;
+        break;
+      }
     }
 
-    const [updatedCount] = await Product.update(rest, {
-      where: { id },
-    });
-
-    if (updatedCount === 0) {
+    if (!found) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
+    await saveProducts(grouped);
+    return NextResponse.json({
+      success: true,
+      message: "Product updated successfully",
+    });
+  } catch (error: any) {
     console.error("PUT Products Error:", error);
     return NextResponse.json(
       { error: "Failed to update product" },
@@ -124,17 +141,28 @@ export async function PUT(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const { id } = await req.json();
+    const grouped = await getProducts();
+    let deleted = false;
 
-    const deletedCount = await Product.destroy({
-      where: { id },
-    });
+    for (let i = 0; i < grouped.length; i++) {
+      const initialCount = grouped[i].products.length;
+      grouped[i].products = grouped[i].products.filter((p: any) => p.id !== id);
+      if (grouped[i].products.length < initialCount) {
+        deleted = true;
+        break;
+      }
+    }
 
-    if (deletedCount === 0) {
+    if (!deleted) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
+    await saveProducts(grouped);
+    return NextResponse.json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } catch (error: any) {
     console.error("DELETE Products Error:", error);
     return NextResponse.json(
       { error: "Failed to delete product" },
