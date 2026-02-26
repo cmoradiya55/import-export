@@ -1,0 +1,52 @@
+﻿.next/dev/types/validator.ts(189,31): error TS2344: Type 'typeof import("D:/import-export/src/app/api/admin/blog/[id]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/blog/[id]">'.
+  Types of property 'GET' are incompatible.
+    Type '(request: Request, { params }: { params: { id: string; }; }) => Promise<NextResponse<BlogPost> | NextResponse<{ error: string; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ id: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ id: string; }>; }' is not assignable to type '{ params: { id: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'id' is missing in type 'Promise<{ id: string; }>' but required in type '{ id: string; }'.
+.next/dev/types/validator.ts(207,31): error TS2344: Type 'typeof import("D:/import-export/src/app/api/admin/products/[id]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/products/[id]">'.
+  Types of property 'GET' are incompatible.
+    Type '(request: Request, { params }: { params: { id: string; }; }) => Promise<NextResponse<Product> | NextResponse<{ error: string; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ id: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ id: string; }>; }' is not assignable to type '{ params: { id: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'id' is missing in type 'Promise<{ id: string; }>' but required in type '{ id: string; }'.
+.next/types/validator.ts(189,31): error TS2344: Type 'typeof import("D:/import-export/src/app/api/admin/blog/[id]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/blog/[id]">'.
+  Types of property 'GET' are incompatible.
+    Type '(request: Request, { params }: { params: { id: string; }; }) => Promise<NextResponse<BlogPost> | NextResponse<{ error: string; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ id: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ id: string; }>; }' is not assignable to type '{ params: { id: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'id' is missing in type 'Promise<{ id: string; }>' but required in type '{ id: string; }'.
+.next/types/validator.ts(207,31): error TS2344: Type 'typeof import("D:/import-export/src/app/api/admin/products/[id]/route")' does not satisfy the constraint 'RouteHandlerConfig<"/api/admin/products/[id]">'.
+  Types of property 'GET' are incompatible.
+    Type '(request: Request, { params }: { params: { id: string; }; }) => Promise<NextResponse<Product> | NextResponse<{ error: string; }>>' is not assignable to type '(request: NextRequest, context: { params: Promise<{ id: string; }>; }) => void | Response | Promise<void | Response>'.
+      Types of parameters '__1' and 'context' are incompatible.
+        Type '{ params: Promise<{ id: string; }>; }' is not assignable to type '{ params: { id: string; }; }'.
+          Types of property 'params' are incompatible.
+            Property 'id' is missing in type 'Promise<{ id: string; }>' but required in type '{ id: string; }'.
+Component/Button/Button.tsx(4,20): error TS2307: Cannot find module '@/src/lib/utils/cn' or its corresponding type declarations.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(1,29): error TS2307: Cannot find module '@/src/data/blogData' or its corresponding type declarations.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(6,29): error TS2307: Cannot find module '@/Component/AnimateOnScroll/AnimateOnScroll' or its corresponding type declarations.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(9,35): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(13,17): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(19,30): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(166,64): error TS7006: Parameter 'paragraph' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(166,75): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(260,53): error TS7006: Parameter 'tag' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(260,58): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(314,67): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(327,67): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(351,49): error TS7006: Parameter 'line' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(353,47): error TS7006: Parameter 'heading' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(353,56): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/app/(public)/blog/[id]/BlogDetailsComponent.tsx(414,65): error TS7006: Parameter 'relatedBlog' implicitly has an 'any' type.
+src/app/(public)/blog/BlogComponent.tsx(4,20): error TS2307: Cannot find module '@/Component/Button/Button' or its corresponding type declarations.
+src/app/(public)/blog/BlogComponent.tsx(6,29): error TS2307: Cannot find module '@/src/data/blogData' or its corresponding type declarations.
+src/app/(public)/blog/BlogComponent.tsx(7,30): error TS2307: Cannot find module '@/public/AllIconComponent' or its corresponding type declarations.
+src/app/(public)/blog/BlogComponent.tsx(8,29): error TS2307: Cannot find module '@/Component/AnimateOnScroll/AnimateOnScroll' or its corresponding type declarations.
+src/app/(public)/blog/BlogComponent.tsx(20,25): error TS7006: Parameter 'blog' implicitly has an 'any' type.
+src/app/(public)/blog/BlogComponent.tsx(151,45): error TS7006: Parameter 'post' implicitly has an 'any' type.
+src/app/(public)/contact/ContectComponent.tsx(3,30): error TS2307: Cannot find module '@/public/AllIconComponent' or its corresponding type declarations.
+src/app/(public)/contact/ContectComponent.tsx(4,29): error TS2307: Cannot find module '@/Component/AnimateOnScroll/AnimateOnScroll' or its corresponding type declarations.
