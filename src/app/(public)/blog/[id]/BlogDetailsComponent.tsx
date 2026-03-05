@@ -90,7 +90,7 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
           </div>
         </div>
 
-        <div className="relative container mx-auto px-4 py-12 md:py-30 mb-12">
+        <div className="relative container mx-auto px-4 py-8 md:py-12 lg:py-30 mb-6 md:mb-12">
           {/* Back Button */}
           <Link href="/blog">
             <button className="my-8 inline-flex items-center gap-2 text-white/90 group backdrop-blur-sm px-5 py-2.5 hover:scale-110 transition-transform duration-300">
@@ -114,7 +114,7 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
               </div>
 
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight font-serif">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight font-serif">
                 {blog.title}
               </h1>
             </AnimateOnScroll>
@@ -141,13 +141,13 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
               </div>
 
               {/* Author Info */}
-              <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 mb-30">
+              <div className="inline-flex flex-wrap justify-center items-center gap-4 bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 mb-8 md:mb-30">
                 <img
                   src={blog.authorImage}
                   alt={blog.author}
                   className="w-12 h-12 rounded-full object-cover border-2 border-white/30"
                 />
-                <div className="text-left">
+                <div className="sm:text-left">
                   <p className="font-bold text-lg">{blog.author}</p>
                   <p className="text-sm text-white/80">{blog.authorBio}</p>
                 </div>
@@ -181,7 +181,7 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
             className="animate__slow-2s"
           >
             <div className="rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
-              <div className="relative h-100 md:h-125">
+              <div className="relative h-64 sm:h-80 md:h-100 lg:h-125">
                 <img
                   src={blog.image}
                   alt={blog.title}
@@ -193,7 +193,7 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
           </AnimateOnScroll>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 pb-20">
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 pb-12 md:pb-20 px-4 lg:px-0">
           {/* Main Content */}
           <article className="lg:col-span-8 mt-8">
             {/* Excerpt Card */}
@@ -341,11 +341,11 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
               delay="delay-2000ms"
               className="animate__slow-2s"
             >
-              <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary-600 to-primary-700 p-6 mb-8 shadow-xl">
+              <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-primary-600 to-primary-700 p-5 sm:p-6 mb-8 shadow-xl">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-white/20 rounded-full -mr-20 -mt-20"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/20 rounded-full -ml-16 -mb-16"></div>
                 <div className="relative">
-                  <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 flex items-center gap-3">
                     <Share2 className="w-6 h-6" />
                     Found this helpful? Share it!
                   </h3>
@@ -375,11 +375,11 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
                         <Link
                           rel="stylesheet"
                           href={share.link}
-                          className="flex gap-2 text-sm"
+                          className="flex gap-2 text-sm text-white"
                         >
                           {React.createElement(share.icon, {
                             className:
-                              "w-4 h-4 text-primary-400 group-hover:text-white transition-colors duration-300",
+                              "w-4 h-4 text-primary-300 group-hover:text-white transition-colors duration-300",
                           })}
                           {share.label}
                         </Link>
@@ -440,7 +440,7 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
           </article>
 
           {/* Enhanced Sidebar */}
-          <aside className="lg:col-span-4 mt-8">
+          <aside className="lg:col-span-4 mt-6 lg:mt-8">
             <div className="sticky top-8 space-y-6">
               {/* Table of Contents */}
               <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
@@ -601,7 +601,7 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="relative py-14 overflow-hidden">
+      <section className="relative py-10 md:py-14 overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-br from-primary-600 via-primary-700 to-primary-900">
           <div className="absolute inset-0 opacity-10">
             <div
@@ -623,7 +623,7 @@ const BlogDetailsComponents = ({ blogId }: { blogId: string }) => {
                 <TrendingUp className="w-5 h-5" />
                 <span className="font-semibold">Ready to Take Action?</span>
               </div>
-              <h2 className="text-4xl md:text-4xl font-bold mb-4 font-serif">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 font-serif">
                 Start Your Export Journey Today
               </h2>
               <p className="text-lg text-primary-100 mb-6 max-w-xl mx-auto">

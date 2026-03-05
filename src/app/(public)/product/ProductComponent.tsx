@@ -91,7 +91,7 @@ const ProductComponent = () => {
         </h2>
       </div>
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-2 sm:px-4">
         {/* Product Category Filter - Compact with 'All' */}
         <div className="flex flex-wrap gap-2 justify-center mb-10">
           {/* All filter */}
@@ -138,13 +138,13 @@ const ProductComponent = () => {
                   );
                 }}
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium border transition-all shadow-sm text-xs md:text-sm
-                                    ${
-                                      String(selectedCategory) ===
-                                      String(category.categoryLabel)
-                                        ? "bg-primary-700 text-white border-primary-700 shadow-primary-200"
-                                        : "bg-white text-primary-700 border-primary-200 hover:bg-primary-100 hover:border-primary-400 hover:text-primary-900 focus:ring-2 focus:ring-primary-400"
-                                    }
-                                `}
+                    ${
+                      String(selectedCategory) ===
+                      String(category.categoryLabel)
+                        ? "bg-primary-700 text-white border-primary-700 shadow-primary-200"
+                        : "bg-white text-primary-700 border-primary-200 hover:bg-primary-100 hover:border-pri hover:text-primary-900 focus:ring-2 focus:ring-primary-400"
+                    }
+                  `}
                 style={{ boxShadow: "0 1px 4px 0 rgba(216, 70, 239, 0.05)" }}
               >
                 <span className="text-base md:text-lg">
@@ -163,11 +163,11 @@ const ProductComponent = () => {
           {categoriesToShow.map((category) => (
             <div key={category.categoryId}>
               {category.categoryId !== "all" && (
-                <h3 className="text-2xl font-bold text-primary-700 mb-6 border-l-4 border-primary-700 px-4 bg-primary-600/10 inline-block rounded-r-lg shadow-sm">
+                <h3 className="text-xl sm:text-2xl font-bold text-primary-700 mb-4 sm:mb-6 border-l-4 border-primary-700 px-2 sm:px-4 bg-primary-600/10 inline-block rounded-r-lg shadow-sm">
                   {category.categoryName}
                 </h3>
               )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-7">
                 {/* {category.products.map((product: any) => { */}
                 {(category.products || []).map((product: any) => {
                   // Find the actual category for this product
@@ -190,7 +190,7 @@ const ProductComponent = () => {
                         className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow border border-primary-100 flex flex-col overflow-hidden group cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-400"
                         tabIndex={0}
                       >
-                        <div className="h-80 w-full flex items-center justify-center overflow-hidden bg-primary-50 relative">
+                        <div className="h-48 sm:h-64 md:h-80 w-full flex items-center justify-center overflow-hidden bg-primary-50 relative">
                           <img
                             src={product.image}
                             alt={product.name}
@@ -198,7 +198,7 @@ const ProductComponent = () => {
                             loading="lazy"
                           />
                           <div className="absolute inset-0 bg-primary-800/50 opacity-0 group-hover:opacity-100 group-focus:opacity-100 flex items-center justify-center transition-opacity duration-200">
-                            <p className="text-white text-center text-lg font-bold px-4 py-2 rounded bg-primary-950 shadow-lg flex flex-col items-center gap-1">
+                            <p className="text-white text-center text-sm sm:text-base md:text-lg font-bold px-4 py-2 rounded bg-primary-950 shadow-lg flex flex-col items-center gap-1">
                               {product.name}
                               <span className="text-white text-xs font-medium">
                                 {categoryName}

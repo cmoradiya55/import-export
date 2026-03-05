@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { AllBlogData } from "@/data/blogData";
@@ -31,10 +32,17 @@ const getCategoriesWithCount = () => {
 const categories = getCategoriesWithCount();
 
 const BlogComponent = () => {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredPosts =
+    activeCategory === "All"
+      ? blogPosts
+      : blogPosts.filter((post) => post.category === activeCategory);
+
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-primary-950 text-white py-10">
+      <section className="relative overflow-hidden bg-primary-950 text-white py-12 md:py-16">
         {/* Background Pattern */}
         <div
           className="absolute inset-0 opacity-10"
@@ -50,10 +58,10 @@ const BlogComponent = () => {
               delay="delay-100ms"
               className="animate__slow-2s"
             >
-              <h1 className="text-3xl md:text-3xl lg:text-4xl font-bold mb-6 mt-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 mt-6 leading-tight">
                 Export Insights & Knowledge Hub
               </h1>
-              <p className="text-xl text-primary-100 max-w-2xl mx-auto mb-6">
+              <p className="text-md md:text-lg text-primary-100 max-w-md sm:max-w-xl mx-auto mb-6">
                 Expert guidance on exporting raw food products, market trends,
                 compliance, and sustainable practices
               </p>
@@ -70,7 +78,7 @@ const BlogComponent = () => {
                     placeholder="Search articles..."
                     className="w-full px-6 py-2 bg-white rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-800"
                   />
-                  <Search className="h-5 w-5 text-gray-900 absolute right-4 top-3.5" />
+                  <Search className="h-4 w-4 text-gray-900 absolute right-4 top-3" />
                 </div>
               </AnimateOnScroll>
             </div>
@@ -90,7 +98,7 @@ const BlogComponent = () => {
               <Link href={`/blog/${featuredPost.id}`}>
                 <div className="bg-white border rounded-2xl overflow-hidden shadow-xl">
                   <div className="grid md:grid-cols-2 gap-0">
-                    <div className="relative h-70 md:h-80 overflow-hidden">
+                    <div className="relative h-60 sm:h-72 md:h-80 overflow-hidden">
                       <img
                         src={featuredPost.image}
                         alt={featuredPost.title}
@@ -102,7 +110,7 @@ const BlogComponent = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="p-8 bg-white overflow-hidden z-10">
+                    <div className="p-6 sm:p-8 bg-white overflow-hidden z-10">
                       <div className="flex items-center gap-3 mb-4">
                         <span className="text-primary-600 font-semibold text-xs uppercase tracking-wide">
                           {featuredPost.category}
@@ -150,8 +158,9 @@ const BlogComponent = () => {
             {categories.map((category) => (
               <button
                 key={category.name}
+                onClick={() => setActiveCategory(category.name)}
                 className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                  category.name === "All"
+                  activeCategory === category.name
                     ? "bg-primary-700 text-white shadow-md"
                     : "bg-white text-primary-800 hover:bg-primary-100 border border-gray-200"
                 }`}
@@ -170,8 +179,8 @@ const BlogComponent = () => {
             delay="delay-1000ms"
             className="animate__slow-2s"
           >
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogPosts.map((post) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {filteredPosts.map((post) => (
                 <Link key={post.id} href={`/blog/${post.id}`}>
                   <article className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 group h-full flex flex-col">
                     <div className="relative h-48 overflow-hidden">
@@ -186,7 +195,7 @@ const BlogComponent = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="p-6 flex-1 flex flex-col">
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col">
                       <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
                         <span>{post.date}</span>
                         <span>•</span>
@@ -238,7 +247,7 @@ const BlogComponent = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section className="relative py-14 bg-linear-to-br from-primary-600 to-primary-700 text-white">
+      <section className="relative py-10 md:py-14 bg-linear-to-br from-primary-600 to-primary-700 text-white">
         <div className="absolute inset-0 opacity-10">
           <div
             className="absolute inset-0"
@@ -268,7 +277,7 @@ const BlogComponent = () => {
               delay="delay-1500ms"
               className="animate__slow-2s"
             >
-              <h2 className="text-3xl font-bold mb-4 font-serif">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 font-serif">
                 Stay Informed on Export Trends
               </h2>
               <p className="text-lg text-primary-100 mb-6">
@@ -280,11 +289,11 @@ const BlogComponent = () => {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-6 py-2 rounded-full bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                  className="flex-1 mx-8 px-6 py-2 rounded-full bg-white text-center text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-300"
                 />
                 <button
                   type="submit"
-                  className="px-8 py-2 bg-white text-primary-600 font-semibold rounded-full hover:bg-primary-50 transition-colors shadow-lg"
+                  className="px-8 py-2 mx-auto bg-white text-primary-600 font-semibold rounded-full hover:bg-primary-50 transition-colors shadow-lg"
                 >
                   Subscribe
                 </button>

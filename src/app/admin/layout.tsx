@@ -9,8 +9,8 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
 
-  // Prevent wrapping login page with admin layout shell if accessed directly
-  if (pathname === "/admin/login") {
+  // Prevent wrapping login or forgot password pages with admin layout shell if accessed directly
+  if (pathname === "/admin/login" || pathname === "/admin/forgotPassword") {
     return <>{children}</>;
   }
 

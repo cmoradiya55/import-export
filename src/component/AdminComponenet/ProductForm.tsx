@@ -234,11 +234,21 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                         </label>
                       </div>
                       <input
-                        {...register("name", { required: true })}
+                        {...register("name", {
+                          required: "Product name is required",
+                        })}
                         placeholder="Enter product name"
-                        required
-                        className="border border-gray-300 rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600 text-gray-800"
+                        className={`border rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                          errors.name
+                            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                        }`}
                       />
+                      {errors.name && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.name.message}
+                        </p>
+                      )}
                     </div>
 
                     {/* Products Id */}
@@ -294,14 +304,26 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                       <div className="flex items-center justify-between">
                         <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                           Description
+                          <span className="text-red-500">*</span>
                         </label>
                       </div>
                       <textarea
-                        {...register("description")}
+                        {...register("description", {
+                          required: "Description is required",
+                        })}
                         rows={3}
                         placeholder="Describe your product..."
-                        className=" resize-none border border-gray-300 rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600 text-gray-800"
+                        className={`resize-none border rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                          errors.description
+                            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                        }`}
                       />
+                      {errors.description && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.description.message}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -322,32 +344,56 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                         <div className="flex items-center justify-between ">
                           <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                             Package Sizes
+                            <span className="text-red-500">*</span>
                           </label>
                           <span className="text-xs text-primary-600 italic">
                             Comma separated
                           </span>
                         </div>
                         <input
-                          {...register("packageSizes")}
+                          {...register("packageSizes", {
+                            required: "Package sizes are required",
+                          })}
                           placeholder="250g, 500g, 1kg"
-                          className="border border-gray-300 rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600 text-gray-800"
+                          className={`border rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                            errors.packageSizes
+                              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                              : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                          }`}
                         />
+                        {errors.packageSizes && (
+                          <p className="text-xs text-red-500 mt-1">
+                            {errors.packageSizes.message}
+                          </p>
+                        )}
                       </div>
 
                       <div className="space-y-2 border border-gray-300 rounded-lg px-3 py-2">
                         <div className="flex items-center justify-between ">
                           <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                             Container Types
+                            <span className="text-red-500">*</span>
                           </label>
                           <span className="text-xs text-primary-600 italic">
                             Comma separated
                           </span>
                         </div>
                         <input
-                          {...register("container")}
+                          {...register("container", {
+                            required: "Container types are required",
+                          })}
                           placeholder="Box, Bag, Jar"
-                          className="border border-gray-300 rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600 text-gray-800"
+                          className={`border rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                            errors.container
+                              ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                              : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                          }`}
                         />
+                        {errors.container && (
+                          <p className="text-xs text-red-500 mt-1">
+                            {errors.container.message}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -368,6 +414,17 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                   </div>
 
                   <ImageUpload value={imageUrl} onChange={handleImageChange} />
+                  <input
+                    type="hidden"
+                    {...register("image", {
+                      required: "Product image is required",
+                    })}
+                  />
+                  {errors.image && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.image.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Category */}
@@ -386,15 +443,31 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                       <div className="flex items-center justify-between">
                         <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                           Category ID
+                          <span className="text-red-500">*</span>
                         </label>
                       </div>
                       <input
                         type="number"
-                        {...register("categoryId", { valueAsNumber: true })}
+                        {...register("categoryId", {
+                          required: "Category ID is required",
+                          valueAsNumber: true,
+                          min: {
+                            value: 1,
+                            message: "Category ID must be greater than 0",
+                          },
+                        })}
                         placeholder="0"
-                        className=" border border-gray-300 text-gray-800 rounded-lg px-3 py-2 w-full placeholder:text-gray-400
-                          focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600"
+                        className={`border rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                          errors.categoryId
+                            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                        }`}
                       />
+                      {errors.categoryId && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.categoryId.message}
+                        </p>
+                      )}
                     </div>
 
                     {/* Category Name */}
@@ -402,13 +475,25 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                       <div className="flex items-center justify-between">
                         <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                           Category Name
+                          <span className="text-red-500">*</span>
                         </label>
                       </div>
                       <input
-                        {...register("categoryName")}
+                        {...register("categoryName", {
+                          required: "Category name is required",
+                        })}
                         placeholder="e.g., Pulses"
-                        className=" border border-gray-300 rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600 text-gray-800"
+                        className={`border rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                          errors.categoryName
+                            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                        }`}
                       />
+                      {errors.categoryName && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.categoryName.message}
+                        </p>
+                      )}
                     </div>
 
                     {/* Category Label */}
@@ -416,13 +501,25 @@ const ProductForm = ({ initialData, onSubmit }: ProductFormProps) => {
                       <div className="flex items-center justify-between">
                         <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
                           Category Label
+                          <span className="text-red-500">*</span>
                         </label>
                       </div>
                       <input
-                        {...register("categoryLabel")}
+                        {...register("categoryLabel", {
+                          required: "Category label is required",
+                        })}
                         placeholder="e.g., Pulses"
-                        className=" border border-gray-300 rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring focus:ring-primary-600 focus:border-primary-600 text-gray-800"
+                        className={`border rounded-lg px-3 py-2 w-full placeholder:text-gray-400 focus:outline-none focus:ring text-gray-800 ${
+                          errors.categoryLabel
+                            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-300 focus:ring-primary-600 focus:border-primary-600"
+                        }`}
                       />
+                      {errors.categoryLabel && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {errors.categoryLabel.message}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
