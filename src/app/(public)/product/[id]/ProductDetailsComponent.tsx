@@ -67,17 +67,17 @@ const ProductDetailsComponent = ({ productId }: { productId: string }) => {
   }
 
   return (
-    <div className="py-16 bg-primary-50 min-h-screen">
+    <div className="py-10 md:py-16 bg-primary-50 min-h-screen">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-10 items-center md:items-start">
           {/* Product Image */}
-          <div className="w-full md:w-1/2 flex justify-center px-10">
+          <div className="w-full md:w-1/2 flex justify-center px-0 md:px-10">
             <AnimateOnScroll
               animation="animate__zoomIn"
               delay="delay-500ms"
               className="animate__slow-3s"
             >
-              <div className="h-150 w-full rounded-2xl flex items-center justify-center overflow-hidden bg-primary-50 relative">
+              <div className="h-64 sm:h-80 md:h-[500px] lg:h-[600px] w-full rounded-2xl flex items-center justify-center overflow-hidden bg-primary-50 relative">
                 <img
                   src={product.image}
                   alt={product.name}
@@ -95,7 +95,7 @@ const ProductDetailsComponent = ({ productId }: { productId: string }) => {
               delay="delay-500ms"
               className="animate__slow-3s"
             >
-              <h1 className="text-3xl md:text-4xl font-extrabold text-primary-900 mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-900 mb-2">
                 {product.name}
               </h1>
             </AnimateOnScroll>
@@ -123,27 +123,31 @@ const ProductDetailsComponent = ({ productId }: { productId: string }) => {
                     <tbody>
                       {product.packageSizes && (
                         <tr className="border-b border-primary-100 hover:bg-primary-50/50">
-                          <th className="py-3 px-4 font-semibold border-white border-b bg-primary-100 text-primary-800 w-1/3">
+                          <th className="py-2 px-3 sm:py-3 sm:px-4 font-semibold border-white border-b bg-primary-100 text-primary-800 w-1/3">
                             Package Sizes
                           </th>
-                          <td className="py-3 px-4">
+                          <td className="py-2 px-3 sm:py-3 sm:px-4">
                             {product.packageSizes.join(", ")}
                           </td>
                         </tr>
                       )}
                       {product.container && (
                         <tr className="border-b border-primary-100 hover:bg-primary-50/50">
-                          <th className="py-3 px-4 font-semibold border-white border-b bg-primary-100 text-primary-800">
+                          <th className="py-2 px-3 sm:py-3 sm:px-4 font-semibold border-white border-b bg-primary-100 text-primary-800">
                             Container
                           </th>
-                          <td className="py-3 px-4">{product.container}</td>
+                          <td className="py-2 px-3 sm:py-3 sm:px-4">
+                            {product.container}
+                          </td>
                         </tr>
                       )}
                       <tr className="border-b border-primary-100 hover:bg-primary-50/50">
-                        <th className="py-3 px-4 font-semibold bg-primary-100 text-primary-800">
+                        <th className="py-2 px-3 sm:py-3 sm:px-4 font-semibold bg-primary-100 text-primary-800">
                           Quality Control
                         </th>
-                        <td className="py-3 px-4">100% Checked</td>
+                        <td className="py-2 px-3 sm:py-3 sm:px-4">
+                          100% Checked
+                        </td>
                       </tr>
                     </tbody>
                   </table>

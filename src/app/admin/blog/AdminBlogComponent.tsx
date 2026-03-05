@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -10,7 +9,6 @@ import {
   FileText,
   Calendar,
   User,
-  Tag,
 } from "lucide-react";
 // import type { BlogPostAttributes } from "@/lib/db/types";
 
