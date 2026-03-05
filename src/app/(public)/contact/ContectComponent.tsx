@@ -54,21 +54,21 @@ const ContactComponent = () => {
           }}
         ></div>
 
-        <div className="relative container mx-auto px-4 py-20 md:py-28 mb-30">
+        <div className="relative container mx-auto px-4 py-12 md:py-20 lg:py-28 mb-16 md:mb-30">
           <AnimateOnScroll
             animation="animate__backInUp"
             delay="delay-1000ms"
             className="animate__slow-3s"
           >
             <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full mb-2 mt-14">
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full mb-2 mt-8 md:mt-14">
                 <MessageSquare className="w-5 h-5" />
                 <span className="font-semibold">Get In Touch</span>
               </div>
-              <h1 className="text-3xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 leading-tight">
                 Let's Start Your Export Journey Together
               </h1>
-              <p className="text-xl text-primary-100 max-w-2xl mx-auto mb-30">
+              <p className="text-lg md:text-xl text-primary-100 max-w-2xl mx-auto mb-16 md:mb-30">
                 Whether you're starting fresh or scaling up, our export
                 specialists are here to guide you every step of the way.
               </p>
@@ -92,14 +92,14 @@ const ContactComponent = () => {
         </div>
       </section>
 
-      <section className="container mx-auto space-y-6">
+      <section className="container mx-auto px-4 space-y-6">
         {/* Quick Contact Cards */}
         <AnimateOnScroll
           animation="animate__fadeInUp"
           delay="delay-1000ms"
           className="animate__slow-2s"
         >
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-12 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto mt-8 sm:mt-12 mb-8 sm:mb-12">
             {quickContacts.map((contact, index) => (
               <div
                 key={index}
@@ -139,7 +139,7 @@ const ContactComponent = () => {
         {/* Main Contact Section */}
         <div className="relative mt-12 pb-20">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 md:mb-16">
             <AnimateOnScroll
               animation="animate__fadeInUp"
               delay="delay-1000ms"
@@ -153,7 +153,7 @@ const ContactComponent = () => {
                   icon="headerIcon"
                 />
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold font-serif text-primary-900 mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-primary-900 mb-4 md:mb-6">
                 Send Us a Message
               </h2>
               <div className="w-20 h-1 bg-primary-600 mx-auto mb-4 rounded-full"></div>
@@ -173,7 +173,7 @@ const ContactComponent = () => {
                 delay="delay-500ms"
                 className="animate__slow-2s"
               >
-                <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-200">
+                <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-gray-200">
                   <form className="space-y-4">
                     {/* Full Name */}
                     <div className="flex items-center gap-4 border-b border-gray-300 pb-4">
@@ -242,7 +242,7 @@ const ContactComponent = () => {
                 delay="delay-1500ms"
                 className="animate__slow-2s"
               >
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100">
                   <h3 className="text-2xl font-bold text-gray-900 mb-6">
                     Why Choose Us?
                   </h3>
@@ -309,7 +309,7 @@ const ContactComponent = () => {
                 delay="delay-2500ms"
                 className="animate__slow-2s"
               >
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+                <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-200">
                   <h3 className="text-xl font-bold text-gray-900 mb-6">
                     Additional Information
                   </h3>
@@ -363,7 +363,7 @@ const ContactComponent = () => {
                 delay="delay-1500ms"
                 className="animate__slow-2s"
               >
-                <div className="bg-linear-to-br from-primary-50 to-primary-100 rounded-2xl p-8 border border-primary-200">
+                <div className="bg-linear-to-br from-primary-50 to-primary-100 rounded-2xl p-6 sm:p-8 border border-primary-200">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="p-3 bg-white rounded-xl shadow-md">
                       <Clock className="w-6 h-6 text-primary-600" />

@@ -1,32 +1,49 @@
 "use client";
 
 import {
-  ChevronDown,
   ChevronDownIcon,
-  Facebook,
   FacebookIcon,
   Instagram,
   Linkedin,
   Mail,
   Menu,
+  X,
   Phone,
-  Search,
+  Plus,
+  Minus,
 } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { AllProductsList } from "@/data/productData";
 
 const Header = () => {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProductOpen, setIsProductOpen] = useState(false);
+
+  // Close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  // Prevent scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isMenuOpen]);
 
   // Hide header on admin pages
   if (pathname?.startsWith("/admin")) return null;
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-      <div className="container">
-        {/* Header */}
-        <div className="mx-auto px-8 h-12 bg-primary-950 rounded-b-4xl flex items-center justify-between">
+      <div className="container mx-auto">
+        {/* Header - Top Bar */}
+        <div className="hidden lg:flex mx-auto px-8 h-12 bg-primary-950 rounded-b-4xl items-center justify-between">
           {/* Contact */}
           <div className="flex items-center h-full gap-4">
             <div>
@@ -76,16 +93,16 @@ const Header = () => {
         </div>
 
         {/* Navbar */}
-        <div className="mx-auto px-8 flex items-center justify-between h-16">
+        <div className="mx-auto px-4 md:px-8 flex items-center justify-between h-20">
           {/* Logo Section */}
           <div className="flex items-center">
-            <div>
+            <Link href="/" className="flex items-center">
               <span className="text-2xl font-bold text-primary-900">Logo</span>
-            </div>
+            </Link>
           </div>
 
-          {/* Navigation Menu */}
-          <nav className="hidden md:flex items-center space-x-8">
+          {/* Navigation Menu - Desktop */}
+          <nav className="hidden lg:flex items-center space-x-8">
             {/* Main navigation links with numbers */}
             {[
               { name: "Home", href: "/" },
@@ -141,21 +158,141 @@ const Header = () => {
             )}
           </nav>
 
-          {/* User Actions */}
-          <div className="hidden md:flex items-center space-x-3">
+          {/* User Actions - Desktop */}
+          <div className="hidden lg:flex items-center space-x-3">
             <div className="flex items-center space-x-6">
-              <div className="cursor-pointer font-bold">
+              {/* <button className="cursor-pointer font-bold">
                 <Menu className="h-5 w-5 text-primary-900" />
-              </div>
+              </button> */}
+              <Link
+                href="/contact"
+                className="font-medium px-4 py-1 rounded-full transition-all duration-200 text-white bg-primary-950 shadow-lg"
+              >
+                Book Appointment
+              </Link>
             </div>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button className="flex md:hidden flex-col p-2 space-y-1">
-            <span className="w-5 h-0.5 bg-gray transition-all"></span>
-            <span className="w-5 h-0.5 bg-gray transition-all"></span>
-            <span className="w-5 h-0.5 bg-gray transition-all"></span>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex lg:hidden p-2 text-primary-900 hover:bg-primary-50 rounded-xl transition-all"
+            aria-label="Toggle Menu"
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Drawer */}
+      <div
+        className={`fixed inset-0 z-50 lg:hidden scroll-smooth scroll-y-auto transition-all duration-300 ${isMenuOpen ? "visible" : "invisible"}`}
+      >
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setIsMenuOpen(false)}
+        />
+
+        {/* Sidebar */}
+        <div
+          className={`absolute right-0 top-0 bottom-0 w-80 bg-white shadow-2xl transition-transform duration-300 flex flex-col ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <div className="p-6 flex items-center justify-between border-b border-gray-100">
+            <span className="text-2xl font-bold text-primary-900">Logo</span>
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <X className="h-6 w-6 text-gray-500" />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto py-6 px-4">
+            <nav className="flex flex-col gap-2">
+              {[
+                { name: "Home", href: "/" },
+                { name: "About", href: "/about" },
+                { name: "Product", href: "/product", dropdown: true },
+                { name: "Blog", href: "/blog" },
+                { name: "Contact Us", href: "/contact" },
+              ].map((item) => (
+                <div key={item.name} className="flex flex-col">
+                  {item.dropdown ? (
+                    <>
+                      <button
+                        onClick={() => setIsProductOpen(!isProductOpen)}
+                        className={`flex items-center justify-between w-full px-4 py-3 rounded-xl font-semibold transition-all ${isProductOpen ? "bg-primary-950 text-white" : "text-gray-700 hover:bg-primary-50"}`}
+                      >
+                        {item.name}
+                        {isProductOpen ? (
+                          <Minus className="w-4 h-4" />
+                        ) : (
+                          <Plus className="w-4 h-4" />
+                        )}
+                      </button>
+
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ${isProductOpen ? "max-h-[1000px] mt-2 opacity-100" : "max-h-0 opacity-0"}`}
+                      >
+                        <div className="flex flex-col gap-1 pl-4 border-l-2 border-primary-100">
+                          {AllProductsList.map((opt) => (
+                            <Link
+                              key={opt.categoryLabel}
+                              href={`/product?category=${encodeURIComponent(opt.categoryLabel)}`}
+                              className="px-4 py-3 rounded-lg text-gray-600 hover:bg-primary-50 hover:text-primary-900 transition-colors font-medium"
+                            >
+                              {opt.categoryName}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className={`px-4 py-3 rounded-xl font-semibold transition-all ${pathname === item.href ? "bg-primary-950 text-white shadow-md" : "text-gray-700 hover:bg-primary-50"}`}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
+
+          <div className="p-6 border-t border-gray-100 bg-gray-50">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary-100 rounded-lg text-primary-900">
+                  <Phone className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+                    Call Us
+                  </p>
+                  <p className="font-bold text-gray-900">+91 9512517666</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary-100 rounded-lg text-primary-900">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+                    Email Us
+                  </p>
+                  <p className="font-bold text-gray-900 text-sm">
+                    contact@example.com
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

@@ -11,15 +11,17 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protect admin pages and admin API routes
-  // BYPASS: Allowing admin access without token as requested
-  if (pathname.startsWith("/admin")) {
-    return NextResponse.next();
-  }
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
 
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+    if (!token) {
+      const loginUrl = new URL("/admin/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
 
   return NextResponse.next();
 }
